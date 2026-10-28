@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لعبة أسلوب التعجب</title>
+<style>
+:root{--bg1:#1e2a5a;--bg2:#2b6fb5;--card:#ffffff;--ink:#1b1b2f;--accent:#ffd23f;--ok:#2e9e5b;--bad:#e5383b;--soft:#eef3ff;--line:#c7d2ea;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#11183a;--bg2:#1c4a7d;--card:#1f2748;--ink:#f1f3ff;--soft:#2a3460;--line:#46528a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg1:#11183a;--bg2:#1c4a7d;--card:#1f2748;--ink:#f1f3ff;--soft:#2a3460;--line:#46528a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Tahoma,Arial,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));background-color:var(--bg1);display:flex;align-items:center;justify-content:center;padding:16px;overflow-x:hidden}
+.stage{width:100%;max-width:760px;position:relative}
+.screen{background:var(--card);border-radius:28px;padding:28px 24px;box-shadow:0 18px 50px rgba(0,0,0,.35);text-align:center;display:none;animation:in .5s cubic-bezier(.2,.9,.3,1.2)}
+.screen.on{display:block}
+@keyframes in{from{opacity:0;transform:translateX(-60px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes out{to{opacity:0;transform:translateX(60px) scale(.94)}}
+.screen.leave{animation:out .3s ease forwards}
+h1{margin:6px 0;font-size:clamp(30px,7vw,48px)}
+.big{font-size:84px;line-height:1;color:var(--bad);font-weight:700;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-10px) rotate(-6deg)}}
+p{font-size:20px;line-height:1.8;margin:8px 0}
+input{font:inherit;font-size:22px;text-align:center;width:min(100%,380px);padding:12px;border-radius:16px;border:3px solid var(--line);background:var(--soft);color:var(--ink);margin:10px 0}
+button{font:inherit;cursor:pointer;border:0}
+.btn{background:var(--accent);color:#1e2a5a;font-weight:700;font-size:26px;padding:14px 40px;border-radius:999px;box-shadow:0 6px 0 #c9962b;margin-top:12px;transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #c9962b}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;font-size:20px}
+.pill{background:var(--soft);border-radius:999px;padding:6px 16px}
+.bar{height:16px;background:var(--soft);border-radius:99px;overflow:hidden;margin:14px 0 4px}
+.bar i{display:block;height:100%;width:100%;background:var(--ok);border-radius:99px;transform-origin:right;transition:background .3s}
+.q{font-size:clamp(24px,5vw,34px);font-weight:700;margin:18px 0;line-height:1.7;min-height:90px;display:flex;align-items:center;justify-content:center}
+.opts{display:grid;gap:12px}
+.opt{background:var(--soft);color:var(--ink);border:3px solid var(--line);border-radius:20px;padding:16px;font-size:clamp(22px,4.6vw,30px);font-weight:700;transition:transform .15s,background .2s}
+.opt:hover:not(:disabled){transform:scale(1.03);border-color:var(--accent)}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff;animation:pop .4s}
+.opt.no{background:var(--bad);border-color:var(--bad);color:#fff;animation:shake .4s}
+@keyframes pop{50%{transform:scale(1.08)}}
+@keyframes shake{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.msg{min-height:40px;font-size:24px;font-weight:700;margin-top:10px}
+.conf{position:fixed;top:-30px;font-size:28px;pointer-events:none;animation:fall 1.6s linear forwards;z-index:9}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+.cert{border:12px double #c9962b;background:#fffaf0;color:#2a2210;border-radius:14px;padding:26px 16px;position:relative}
+.cert h2{font-size:clamp(28px,6vw,44px);margin:4px 0;color:#1e2a5a}
+.cert .nm{font-size:clamp(32px,7vw,52px);font-weight:700;color:#b3261e;border-bottom:3px dotted #c9962b;display:inline-block;padding:0 24px;margin:8px 0}
+.cert p{color:#2a2210}
+.stars{font-size:44px;letter-spacing:6px}
+.sign{display:flex;justify-content:space-around;margin-top:16px;font-size:18px;font-weight:700}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn.alt{background:var(--soft);color:var(--ink);box-shadow:0 6px 0 var(--line)}
+@media print{body{background:#fff;padding:0;display:block}.screen{display:none!important;box-shadow:none}#end{display:block!important;animation:none}#end .row,#end .hide{display:none}@page{size:A4 landscape;margin:10mm}}
+</style>
+</head>
+<body>
+<div class="stage">
+ <section class="screen on" id="start">
+  <div class="big">!</div>
+  <h1>تَحَدِّي أُسْلُوبِ التَّعَجُّبِ</h1>
+  <p>٥ أَسْئِلَةٍ سَهْلَةٍ عَنْ دُبَيَّ وَالْقَاهِرَةِ<br>لَدَيْكَ ١٥ ثَانِيَةً لِكُلِّ سُؤَالٍ ⏱️</p>
+  <input id="nm" placeholder="اُكْتُبِ اسْمَكَ هُنَا" maxlength="30" autocomplete="off">
+  <br><button class="btn" id="go">اِبْدَأِ اللُّعْبَةَ 🚀</button>
+ </section>
+ <section class="screen" id="play">
+  <div class="top"><span class="pill" id="num">١ / ٥</span><span class="pill" id="sc">⭐ ٠</span><span class="pill" id="tm">⏱️ ١٥</span></div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="q" id="q"></div>
+  <div class="opts" id="opts"></div>
+  <div class="msg" id="msg"></div>
+ </section>
+ <section class="screen" id="end">
+  <div class="cert">
+   <div class="stars" id="stars"></div>
+   <h2>شَهَادَةُ تَقْدِيرٍ</h2>
+   <p>تَشْهَدُ مَدْرَسَةُ جِيمْز بِأَنَّ الطَّالِبَ/الطَّالِبَةَ</p>
+   <div class="nm" id="cn"></div>
+   <p id="ctext"></p>
+   <p><b id="cs"></b></p>
+   <div class="sign"><span id="dt"></span><span>مُعَلِّمُ اللُّغَةِ الْعَرَبِيَّةِ : مَحْمُودٌ عَادِلٌ</span></div>
+  </div>
+  <div class="row"><button class="btn" id="print">🖨️ طِبَاعَةُ الشَّهَادَةِ</button><button class="btn alt" id="again">🔄 لَعِبٌ مِنْ جَدِيدٍ</button></div>
+ </section>
+</div>
+<script>
+const QS=[
+ {q:'مَا صِيغَةُ أُسْلُوبِ التَّعَجُّبِ ؟',a:['مَا أَفْعَلَ … !','هَلْ أَفْعَلُ … ؟','يَا فُلَانُ … .']},
+ {q:'أَيُّ جُمْلَةٍ فِيهَا تَعَجُّبٌ ؟',a:['مَا أَجْمَلَ دُبَيَّ !','دُبَيُّ جَمِيلَةٌ .','أَيْنَ دُبَيُّ ؟']},
+ {q:'مَا الْعَلَامَةُ الَّتِي نَضَعُهَا فِي آخِرِ جُمْلَةِ التَّعَجُّبِ ؟',a:['!','؟','.']},
+ {q:'أَكْمِلْ : مَا ______ الْأَهْرَامَاتِ !',a:['أَعْظَمَ','عَظِيمَةٌ','عَظِيمٌ']},
+ {q:'تَعَجَّبْ مِنْ : بُرْجُ خَلِيفَةَ طَوِيلٌ .',a:['مَا أَطْوَلَ بُرْجَ خَلِيفَةَ !','مَا طَوِيلٌ بُرْجُ خَلِيفَةَ !','بُرْجُ خَلِيفَةَ مَا أَطْوَلَ !']}
+];
+const T=15,$=id=>document.getElementById(id),ar=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+let i=0,score=0,left=T,tick=null,locked=false;
+function show(id){const cur=document.querySelector('.screen.on');const nx=$(id);
+ if(cur&&cur!==nx){cur.classList.add('leave');setTimeout(()=>{cur.classList.remove('on','leave');nx.classList.add('on')},280)}else nx.classList.add('on')}
+function confetti(){for(let k=0;k<26;k++){const s=document.createElement('span');s.className='conf';s.textContent=['🎉','⭐','✨','🎊'][k%4];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.4+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),2300)}}
+function ask(){locked=false;const d=QS[i];$('num').textContent=ar(i+1)+' / ٥';$('sc').textContent='⭐ '+ar(score);$('q').textContent=d.q;$('msg').textContent='';
+ const order=d.a.map((t,k)=>({t,ok:k===0})).sort(()=>Math.random()-.5);
+ $('opts').innerHTML='';order.forEach(o=>{const b=document.createElement('button');b.className='opt';b.textContent=o.t;b.dataset.ok=o.ok?1:0;b.onclick=()=>pick(b);$('opts').appendChild(b)});
+ left=T;paint();clearInterval(tick);tick=setInterval(()=>{left--;paint();if(left<=0){clearInterval(tick);pick(null)}},1000)}
+function paint(){$('tm').textContent='⏱️ '+ar(Math.max(left,0));const b=$('bar');b.style.transform='scaleX('+Math.max(left,0)/T+')';b.style.background=left>8?'var(--ok)':left>4?'#f4a300':'var(--bad)'}
+function pick(b){if(locked)return;locked=true;clearInterval(tick);
+ const all=[...document.querySelectorAll('.opt')];all.forEach(x=>x.disabled=true);
+ const good=all.find(x=>x.dataset.ok==='1');
+ if(b&&b.dataset.ok==='1'){score++;b.classList.add('ok');$('msg').textContent='أَحْسَنْتَ ! 🎉';confetti()}
+ else{if(b)b.classList.add('no');good.classList.add('ok');$('msg').textContent=b?'حَاوِلْ مَرَّةً أُخْرَى فِي السُّؤَالِ الْقَادِمِ 💪':'اِنْتَهَى الْوَقْتُ ⏰'}
+ $('sc').textContent='⭐ '+ar(score);
+ setTimeout(()=>{i++;if(i<QS.length){const p=$('play');p.classList.add('leave');setTimeout(()=>{p.classList.remove('leave');p.style.animation='none';p.offsetWidth;p.style.animation='';ask()},300)}else finish()},1800)}
+function finish(){const n=$('nm').value.trim()||'الطَّالِبُ الْمُجْتَهِدُ';$('cn').textContent=n;
+ const t=score===5?'بِتَفَوُّقٍ وَامْتِيَازٍ':score>=3?'بِنَجَاحٍ':'بِمُحَاوَلَةٍ مُمَيَّزَةٍ';
+ $('ctext').textContent='أَتَمَّ تَحَدِّي أُسْلُوبِ التَّعَجُّبِ '+t+' ، وَتَعَجَّبَ مِنْ جَمَالِ دُبَيَّ وَالْقَاهِرَةِ !';
+ $('cs').textContent='النَّتِيجَةُ : '+ar(score)+' مِنْ ٥';
+ $('stars').textContent='⭐'.repeat(Math.max(score,1))+'☆'.repeat(5-Math.max(score,1));
+ $('dt').textContent='التَّارِيخُ : '+new Date().toLocaleDateString('ar-AE');
+ show('end');setTimeout(confetti,400)}
+$('go').onclick=()=>{i=0;score=0;show('play');setTimeout(ask,300)};
+$('again').onclick=()=>show('start');
+$('print').onclick=()=>window.print();
+$('nm').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click()});
+</script>
+</body>
+</html>
